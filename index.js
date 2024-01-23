@@ -55,6 +55,28 @@ app.post("/libros", (req, res) => {
     res.json(nuevoLibro);
 });
 
+app.put("/libros/:id", (req, res) => {
+    const data = readData();
+    const body = req.body;
+    const id = parseInt(req.params.id);
+    const libroIndice = data.libros.findIndex((libro) => libro.id === id);
+    data.libros[libroIndice] = {
+        ...data.libros[libroIndice],
+        ...body,
+    };
+    writeData(data);
+    res.json({ message: "Libro actualizado correctamente" });
+});
+
+app.delete("/libros/:id", (req, res) => {
+    const data = readData();
+    const id = parseInt(req.params.id);
+    const libroIndice = data.libros.findIndex((libro) => libro.id === id);
+    data.libros.splice(libroIndice, 1);
+    writeData(data);
+    res.json({ message: "Libro borrado correctamente" });
+});
+
 app.listen(3000, () => {
     console.log("Server listening on port 3000");
 });
